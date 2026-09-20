@@ -1,0 +1,31 @@
+{
+  "Cantidad": 4,
+  "FechaCreacion": "2026-09-19T22:01:24.4903949Z",
+  "Version": "v1",
+  "Listado": [
+    {
+      "CodigoExterno": "696750-3-LR26",
+      "Nombre": "SERVICIO DE GUARDIAS DE SEGURIDAD PARA LA FISCALÍA",
+      "CodigoEstado": 8,
+      "FechaCierre": "2026-07-28T18:00:00"
+    },
+    {
+      "CodigoExterno": "835727-29-LE26",
+      "Nombre": "CONSULTORÍA DE APOYO A LA O. DESARROLLO PRODUCTIVO",
+      "CodigoEstado": 8,
+      "FechaCierre": "2026-09-14T18:35:00"
+    },
+    {
+      "CodigoExterno": "1406-8-LE26",
+      "Nombre": "DISTRIBUCION AGUA POTABLE SSR-PUANGUE 4T 2026",
+      "CodigoEstado": 5,
+      "FechaCierre": "2026-09-29T16:37:00"
+    },
+    {
+      "CodigoExterno": "2495-9-LP26",
+      "Nombre": "PRODUCCIÓN INTEGRAL EXPO ANIVERSARIO COYHAIQUE",
+      "CodigoEstado": 8,
+      "FechaCierre": "2026-08-11T15:15:00"
+    }
+  ]
+}
