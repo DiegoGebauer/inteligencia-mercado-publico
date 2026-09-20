@@ -228,3 +228,10 @@ __marimo__/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
+
+# Datos generados por el ETL
+data/raw/**
+!data/raw/.gitkeep
+
+data/processed/**
+!data/processed/.gitkeep
