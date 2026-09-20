@@ -1,0 +1,91 @@
+profile_version: "0.1.0"
+
+company:
+  name: "Consultora de Datos"
+  country: "Chile"
+  description: >
+    Consultora chilena especializada en inteligencia de negocios,
+    ingeniería de datos, automatización, analítica predictiva,
+    machine learning y capacitación en datos.
+
+relevant_services:
+  business_intelligence:
+    description: "Dashboards, reportería y visualización de datos."
+    keywords:
+      - "power bi"
+      - "looker studio"
+      - "dashboard"
+      - "tablero de control"
+      - "inteligencia de negocios"
+      - "business intelligence"
+      - "visualización de datos"
+      - "reportería"
+
+  data_engineering:
+    description: "Bases de datos, integración, ETL y automatización."
+    keywords:
+      - "sql"
+      - "postgresql"
+      - "bigquery"
+      - "base de datos"
+      - "ingeniería de datos"
+      - "integración de datos"
+      - "procesamiento de datos"
+      - "etl"
+      - "automatización"
+      - "data warehouse"
+
+  data_science:
+    description: "Analítica avanzada, modelos predictivos y machine learning."
+    keywords:
+      - "python"
+      - "análisis de datos"
+      - "analítica de datos"
+      - "analítica predictiva"
+      - "ciencia de datos"
+      - "data science"
+      - "machine learning"
+      - "aprendizaje automático"
+      - "modelo predictivo"
+      - "minería de datos"
+
+  consulting_and_training:
+    description: "Consultoría y capacitación relacionadas con datos."
+    keywords:
+      - "consultoría de datos"
+      - "asesoría de datos"
+      - "capacitación en datos"
+      - "capacitación power bi"
+      - "capacitación sql"
+      - "gobierno de datos"
+      - "gestión de datos"
+
+excluded_services:
+  description: >
+    Servicios que no corresponden inicialmente a la oferta principal
+    de la consultora.
+  keywords:
+    - "venta de computadores"
+    - "equipamiento computacional"
+    - "hardware"
+    - "venta de licencias"
+    - "licencias de software"
+    - "desarrollo de sitios web"
+    - "desarrollo web"
+    - "soporte computacional"
+    - "soporte técnico"
+    - "mesa de ayuda"
+    - "telecomunicaciones"
+    - "cableado estructurado"
+    - "ciberseguridad"
+    - "seguridad informática"
+
+territorial_priority:
+  coverage: "national"
+  mode: "priority_signal"
+  priority_regions:
+    - "Región de Los Ríos"
+    - "Región de Los Lagos"
+  description: >
+    La cobertura es nacional. Los Ríos y Los Lagos aumentarán la
+    prioridad territorial, pero no excluirán oportunidades de otras regiones.
