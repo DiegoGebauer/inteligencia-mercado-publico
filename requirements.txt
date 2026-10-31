@@ -4,3 +4,7 @@ pandas
 pyyaml
 pytest
 ipykernel
+sentence-transformers
+numpy
+scikit-learn
+joblib

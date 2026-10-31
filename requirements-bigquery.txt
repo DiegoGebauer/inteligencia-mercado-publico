@@ -1,0 +1,2 @@
+# Dependencia separada del entorno de entrenamiento.
+google-cloud-bigquery==3.46.1

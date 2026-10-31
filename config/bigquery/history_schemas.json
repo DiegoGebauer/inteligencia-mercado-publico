@@ -1,0 +1,347 @@
+{
+  "lotes": [
+    {
+      "name": "LoteId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "EstadoLote",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "FechaConsultada",
+      "type": "DATE",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "InicioUTC",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "FinUTC",
+      "type": "TIMESTAMP",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "ConsultasAPI",
+      "type": "INT64",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "DetallesCorrectos",
+      "type": "INT64",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "DetallesFallidos",
+      "type": "INT64",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "LoteOrigen",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "ArchivoRegistro",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ],
+  "capturas": [
+    {
+      "name": "CapturaId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CodigoExterno",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "FechaCapturaUTC",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "HashFuenteSHA256",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ArchivoOrigen",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "Nombre",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "Organismo",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "Region",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "FechaPublicacion",
+      "type": "DATETIME",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "FechaCierre",
+      "type": "DATETIME",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "EstadoCapturado",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ],
+  "lote_captura": [
+    {
+      "name": "LoteId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CodigoExterno",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CapturaId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ArchivoCaptura",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ReutilizadoDeLote",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    }
+  ],
+  "predicciones": [
+    {
+      "name": "PrediccionId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CapturaId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CodigoExterno",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "LoteId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "IntentoId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "FechaPrediccionUTC",
+      "type": "TIMESTAMP",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "AfinidadPredicha",
+      "type": "INT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "AfinidadEsperada",
+      "type": "FLOAT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ProbAfinidad0",
+      "type": "FLOAT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ProbAfinidad1",
+      "type": "FLOAT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ProbAfinidad2",
+      "type": "FLOAT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ProbAfinidad3",
+      "type": "FLOAT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ModeloURI",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ModeloRunId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "HashModeloOriginalSHA256",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "Encoder",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "RevisionEncoderLocal",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "VersionPerfil",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "VersionCriterio",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "HashTextoSHA256",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ArchivoPredicciones",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "HashPrediccionesSHA256",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    }
+  ],
+  "revisiones": [
+    {
+      "name": "RevisionHistorialId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "RevisionId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "PrediccionId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CapturaId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "CodigoExterno",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "LoteId",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "AfinidadPredicha",
+      "type": "INT64",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "AfinidadHumana",
+      "type": "INT64",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "EstadoRevision",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "FechaRevisionLocal",
+      "type": "DATE",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ZonaHoraria",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "Motivo",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "ConfirmacionUsuario",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "BasesRevisadas",
+      "type": "BOOL",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "AlcanceEvidencia",
+      "type": "STRING",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "IncorporadoEntrenamiento",
+      "type": "BOOL",
+      "mode": "NULLABLE"
+    },
+    {
+      "name": "VersionCriterio",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "ArchivoRevision",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    },
+    {
+      "name": "HashRevisionSHA256",
+      "type": "STRING",
+      "mode": "REQUIRED"
+    }
+  ]
+}

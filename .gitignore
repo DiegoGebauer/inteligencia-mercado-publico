@@ -235,3 +235,14 @@ data/raw/**
 
 data/processed/**
 !data/processed/.gitkeep
+
+
+# Registro y artefactos locales de MLflow
+/mlflow_local/
+
+# Configuración local del editor
+/.vscode/
+
+# Documento personal y paquete temporal
+/notebooks/Radar_laboral_Diego_Gebauer_2026-10-22.docx
+/temporal_affinity_revision_20261006.zip

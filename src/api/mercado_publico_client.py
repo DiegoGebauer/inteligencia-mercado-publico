@@ -1,4 +1,7 @@
 import os
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
+import math
 from pathlib import Path
 from typing import Any
 
@@ -16,6 +19,32 @@ API_URL = (
 )
 
 DEFAULT_TIMEOUT = 30
+
+
+def _retry_after_seconds(value: str | None) -> int | None:
+    """Interpreta segundos o una fecha HTTP; no conserva el encabezado crudo."""
+    if not isinstance(value, str):
+        return None
+    value = value.strip()
+    if value.isascii() and value.isdigit() and len(value) <= 12:
+        return int(value)
+    try:
+        date = parsedate_to_datetime(value)
+        if date.tzinfo is None:
+            return None
+        return max(0, math.ceil((date - datetime.now(timezone.utc)).total_seconds()))
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+class MercadoPublicoAPIError(RuntimeError):
+    """Fallo compatible con RuntimeError, con diagnóstico HTTP sin credenciales."""
+
+    def __init__(self, status_code=None, retry_after_seconds=None):
+        self.status_code = status_code
+        self.retry_after_seconds = retry_after_seconds
+        status = status_code if status_code is not None else "sin respuesta"
+        super().__init__(f"Error al consultar Mercado Público. Estado: {status}")
 
 
 def _load_ticket() -> str:
@@ -56,13 +85,12 @@ def _request_licitaciones(
         status_code = (
             error.response.status_code
             if error.response is not None
-            else "sin respuesta"
+            else None
         )
+        retry_after = _retry_after_seconds(error.response.headers.get("Retry-After")) if error.response is not None else None
 
         # No mostramos la URL porque contiene el ticket.
-        raise RuntimeError(
-            f"Error al consultar Mercado Público. Estado: {status_code}"
-        ) from None
+        raise MercadoPublicoAPIError(status_code, retry_after) from None
 
     try:
         return respuesta.json()
