@@ -25,6 +25,7 @@ CODE_FILES = [
     "src/nlp/rank_tenders.py",
     "src/nlp/train_affinity.py",
     "src/nlp/predict_affinity_pilot.py",
+    "src/run_incremental.py",
 ]
 
 
@@ -250,7 +251,15 @@ def _load_capture(folder, *, permitir_incompleto=False):
         raise ValueError("La captura del listado cambió.")
     plan = plan_lote(manifest["plan"]["fecha_consulta"], manifest["plan"]["limite"])
     codes = sorted({_code(row.get("CodigoExterno")) for row in _records(_read(folder / "listado.json"))})
-    if selected != codes[:plan["limite"]]:
+    incremental = manifest.get("seleccion_incremental")
+    offset = 0
+    if incremental is not None:
+        if not isinstance(incremental, dict) or incremental.get("version") != 1:
+            raise ValueError("Versión de selección incremental inválida.")
+        offset = incremental.get("desplazamiento")
+        if isinstance(offset, bool) or not isinstance(offset, int) or offset < 0:
+            raise ValueError("Desplazamiento incremental inválido.")
+    if selected != codes[offset:offset + plan["limite"]]:
         raise ValueError("La selección no corresponde al listado y límite registrados.")
     records, sources = [], {}
     for entry in manifest["detalles"]:
@@ -310,6 +319,8 @@ def recuperar_lote(carpeta_lote: Path, *, raiz: Path = ROOT) -> Path:
         "origen": {"lote_id": source_folder.name, "captura_sha256": original_hash},
         "nota": "Lote derivado. Conserva fechas originales de los detalles reutilizados; los recuperados tienen nueva fecha de captura.",
     }
+    if "seleccion_incremental" in original:
+        manifest["seleccion_incremental"] = dict(original["seleccion_incremental"])
 
     def copy_capture(relative, expected_hash):
         source = source_folder / relative
