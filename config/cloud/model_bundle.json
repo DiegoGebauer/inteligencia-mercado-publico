@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "model": {
+    "name": "mercado_publico_afinidad_embeddings",
+    "version": "1",
+    "uri": "models:/mercado_publico_afinidad_embeddings/1",
+    "run_id": "0442d20bbde34caea52f1435f7f9733a",
+    "sha256": "371f8222a53f0fa355a3b19826174daa8772bc42c6b87312b95ad4856918185c"
+  },
+  "bundle": {
+    "id": "fa2a8793d037ded375041b94c399d1b26d0617a16f046e7ceaf8de3c8e7c0103",
+    "gcs_uri": "gs://imp-mlops-584518467840/modelos/modelo-v1-fa2a8793d037ded3.tar.gz",
+    "generation": "1794186512188492",
+    "sha256": "8742500e9c1a5ff59c156a517efe027df59b9fd2a88cad92c4d40b0f5e1520ff",
+    "bytes": 289398780,
+    "format": "tar.gz"
+  },
+  "encoder": {
+    "name": "intfloat/multilingual-e5-small",
+    "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "dimension": 384,
+    "max_tokens": 512
+  }
+}
