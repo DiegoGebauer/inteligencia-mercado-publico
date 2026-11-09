@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "purpose": "closed_incremental_state",
+  "checkpoint": {
+    "id": "56e8f0440b5ca44b58c2d9e129c6f462a3fff1fb2bff54161d4b77d438613449",
+    "gcs_uri": "gs://imp-mlops-584518467840/estado/checkpoints/estado-56e8f0440b5ca44b58c2.tar.gz",
+    "generation": "1794196352045311",
+    "sha256": "610810b66b87c882152b95866b965d61f4d669988cc432a976688668234115f2",
+    "bytes": 633073,
+    "format": "tar.gz",
+    "files": 116
+  },
+  "counts": {
+    "lotes": 10,
+    "capturas": 63,
+    "predicciones": 60,
+    "revisiones": 1,
+    "vista_actual": 62,
+    "intentos_incompletos": 0
+  }
+}
