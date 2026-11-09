@@ -5,7 +5,7 @@ capturas y predicciones verificadas; un diario conserva la operación pendiente.
 Una fecha agotada significa agotada en el listado guardado, no mercado completo.
 """
 import argparse
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
 import hashlib
@@ -20,6 +20,7 @@ from src.warehouse.load_history import apply_history, prepare_history
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MULTI_SEGMENT_VERSION = 1
 STATE_REL = Path("data/processed/incremental/estado.json")
 
 
@@ -159,7 +160,7 @@ def _new_id():
     return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ_") + uuid4().hex[:8]
 
 
-def capture_segment(root, lot_id, day, limit, offset, listing=None, original=None):
+def capture_segment(root, lot_id, day, limit, offset, listing=None, original=None, *, control=None):
     """Guarda el listado real completo; cada lote selecciona un tramo verificable."""
     from src.api.mercado_publico_client import get_licitaciones_por_fecha, get_licitacion_por_codigo
     from src.ingestion.capture_store import guardar_captura
@@ -172,7 +173,9 @@ def capture_segment(root, lot_id, day, limit, offset, listing=None, original=Non
                 raise RuntimeError("La captura anterior requiere esperar por 429 antes de recuperarla.")
     folder = _folder(root, lot_id)
     folder.mkdir(parents=True, exist_ok=False)
-    control = batch._RequestControl()
+    control = control if control is not None else batch._RequestControl()
+    first_attempt = control.attempts
+    first_event = len(control.events)
     manifest = {"schema_version": 1, "lote_id": lot_id,
                 "plan": batch.plan_lote(date.fromisoformat(day).strftime("%d%m%Y"), limit),
                 "inicio_utc": batch._utc(), "estado": "fallido", "seleccionados": [],
@@ -232,9 +235,11 @@ def capture_segment(root, lot_id, day, limit, offset, listing=None, original=Non
             manifest["estado"] = ("vacio" if not manifest["codigos_unicos_listado"] else
                                     "completo" if all(row["estado"] == "correcto" for row in manifest["detalles"])
                                     else "incompleto")
-        manifest.update(consultas_api=control.attempts, control_api=control.summary(), fin_utc=batch._utc())
+        summary = control.summary()
+        summary["eventos"] = summary["eventos"][first_event:]
+        manifest.update(consultas_api=control.attempts - first_attempt, control_api=summary, fin_utc=batch._utc())
         guardar_captura(manifest, folder / "captura.json")
-    print("Lote incremental:", folder, "| Estado:", manifest["estado"], "| Consultas:", control.attempts)
+    print("Lote incremental:", folder, "| Estado:", manifest["estado"], "| Consultas:", manifest["consultas_api"])
     if manifest["estado"] not in {"completo", "vacio"}:
         raise RuntimeError("Captura pendiente. El diario conserva el lote para continuar.")
     return folder
@@ -293,8 +298,8 @@ def finish(root, state, args):
     print("Segmento terminado. Ejecuta el mismo rango para avanzar por los pendientes.")
 
 
-def execute(root, days, args):
-    with single_writer(root):
+def execute(root, days, args, *, control=None, locked=False):
+    with (nullcontext() if locked else single_writer(root)):
         listings, done, unfinished = read_inventory(root)
         state_path = root / STATE_REL
         state = _read(state_path) if state_path.is_file() else None
@@ -322,9 +327,9 @@ def execute(root, days, args):
                 missing = sum(row["estado"] != "correcto" for row in manifest["detalles"])
                 if missing > args.limite:
                     raise ValueError(f"La recuperación necesita hasta {missing} detalles; aumenta --limite hasta ese valor.")
-                control = manifest.get("control_api", {})
-                if control.get("bloqueado_por_429"):
-                    deadline = control.get("reintentar_despues_utc")
+                previous_control = manifest.get("control_api", {})
+                if previous_control.get("bloqueado_por_429"):
+                    deadline = previous_control.get("reintentar_despues_utc")
                     if not deadline or datetime.now(timezone.utc) < datetime.fromisoformat(deadline):
                         raise RuntimeError("Todavía no se puede retomar la captura limitada por 429.")
                 raw = (folder / "listado.json").read_bytes()
@@ -334,12 +339,12 @@ def execute(root, days, args):
                 state.update(lote=new_id, fase="captura_pendiente")
                 _atomic_json(state_path, state)
                 capture_segment(root, new_id, manifest["plan"]["fecha_iso"], manifest["plan"]["limite"],
-                                offset, listing=listing, original=manifest)
+                                offset, listing=listing, original=manifest, control=control)
             elif manifest["estado"] == "fallido" and not manifest.get("listado"):
                 new_id = _new_id()
                 state.update(lote=new_id, fase="captura_pendiente")
                 _atomic_json(state_path, state)
-                capture_segment(root, new_id, state["fecha"], args.limite, 0)
+                capture_segment(root, new_id, state["fecha"], args.limite, 0, control=control)
             finish(root, state, args)
             return 0
         _, work = select_work(days, listings, done, unfinished, args.limite)
@@ -360,7 +365,7 @@ def execute(root, days, args):
         _atomic_json(state_path, state)
         if work["tipo"] == "capturar":
             capture_segment(root, lot_id, work["fecha"], work["limite"], work["desplazamiento"],
-                            listing=listings.get(work["fecha"]))
+                            listing=listings.get(work["fecha"]), control=control)
         finish(root, state, args)
         return 0
 
