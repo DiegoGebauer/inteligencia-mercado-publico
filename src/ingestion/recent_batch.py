@@ -172,7 +172,8 @@ def plan_lote(fecha: str, limite: int = 5) -> dict:
         "maximo_consultas_api": 2 * (1 + limite),
         "control_consultas": "intervalo 3 s; un reintento 429; espera Retry-After o 30 s; corte si persiste o espera >60 s",
         "seleccion": "primeros códigos únicos en orden alfabético; sin filtro temático",
-        "modelo": f"{MODEL_NAME}@candidato, contrastado con el comprobante local",
+        "modelo": ("paquete portable local fijado en config/cloud/model_bundle.json" if "MP_MODEL_BUNDLE" in os.environ
+                   else f"{MODEL_NAME}@candidato, contrastado con el comprobante local"),
         "salidas": "JSON del lote, predicciones.csv y registro_ejecucion.json",
     }
 
@@ -489,6 +490,10 @@ def _originals(root):
 
 def predecir_lote(carpeta_lote: Path, *, raiz: Path = ROOT) -> Path:
     """Lee capturas existentes y genera un CSV y registro nuevos, sin API."""
+    # La selección es explícita; un paquete inválido nunca cae al modo MLflow.
+    if "MP_MODEL_BUNDLE" in os.environ:
+        from src.inference.portable_model import configured_archive, predict_batch
+        return predict_batch(carpeta_lote, root=raiz, archive=configured_archive(raiz))
     sys.dont_write_bytecode = True
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"
